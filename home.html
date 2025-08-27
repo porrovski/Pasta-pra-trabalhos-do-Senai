@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trampo Já - Serviços e Mão de Obra</title>
+<style>
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Estrutura para manter o rodapé no fundo */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #003866; /* Fundo verde futurista */
+    position: relative;
+}
+
+/* Conteúdo principal flexível */
+main {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Barra lateral esquerda */
+.sidebar {
+    width: 250px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 0 25px rgba(0,0,0,0.05);
+}
+
+.sidebar h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 10px;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    text-align: left;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover, .sidebar button.active {
+    background: rgba(255,255,255,0.4);
+}
+
+/* Conteúdo principal de serviços */
+.content {
+    flex: 1;
+}
+
+/* Header branco */
+header {
+    position: relative;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: hsl(210, 100%, 87%);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 2;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: #08004e;
+    margin-right: auto;
+}
+
+header button {
+    cursor: pointer;
+    background: #003477;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+header button:hover {
+    background-color: #000000;
+}
+
+/* Hero com blur */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 35px rgba(0,0,0,0.05);
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+/* Serviços */
+.services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background-color: rgba(255,255,255,0.95);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+
+.service-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.service-card:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.service-card h3 {
+    text-align: center;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: #070030;
+    text-transform: uppercase;
+}
+
+.service-card p {
+    text-align: center;
+    font-size: 1rem;
+    padding-bottom: 10px;
+    color: #555;
+}
+
+/* Footer / linha branca fixa no fundo */
+footer {
+    background-color: #ffffff;
+    color: #002c49;
+    text-align: center;
+    padding: 25px 20px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+}
+
+footer p {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Partículas flutuantes futuristas */
+@keyframes floatParticles {
+    0% { transform: translateY(0) translateX(0); opacity: 0.8; }
+    50% { transform: translateY(-20px) translateX(10px); opacity: 0.5; }
+    100% { transform: translateY(0) translateX(0); opacity: 0.8; }
+}
+
+.particle {
+    position: absolute;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    animation: floatParticles 15s ease-in-out infinite;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #fff;
+    color: #000;
+    padding: 20px 25px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+    color: #001e4b;
+}
+
+.modal-content p {
+    margin-bottom: 10px;
+}
+
+.modal-content button {
+    cursor: pointer;
+    background: #002966;
+    color: #ffffff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #0300cc;
+}
+
+/* Form de agendamento dentro modal */
+#agendamentoForm label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+#agendamentoForm select {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#agendamentoForm button.submitBtn {
+    margin-top: 15px;
+    width: 100%;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Trampo Já</h1>
+    <button id="btnContato">Contato</button>
+    <button id="btnLogout">Sair</button>
+</header>
+
+<main>
+    <aside class="sidebar">
+        <h3>Áreas de Serviços</h3>
+        <button data-service="all" class="active">Todos os serviços</button>
+        <button data-service="Eletricista">Eletricista</button>
+        <button data-service="Encanador">Encanador</button>
+        <button data-service="Pintor">Pintor</button>
+        <button data-service="Carpinteiro">Carpinteiro</button>
+        <button data-service="Jardineiro">Jardineiro</button>
+        <button data-service="Limpeza">Limpeza</button>
+        <button data-service="Mudança">Mudança</button>
+        <button data-service="Reformas">Reformas</button>
+        <button data-service="Marcenaria">Marcenaria</button>
+        <button data-service="Segurança">Segurança</button>
+        <button data-service="Reparo Eletrodomésticos">Reparos de Eletrodomésticos</button>
+        <button data-service="Serviços de TI">Serviços de TI</button>
+        <button data-service="Manutenção Ar Condicionado">Manutenção de Ar Condicionados</button>
+        <button data-service="Limpeza Especial">Limpeza Especial</button>
+    </aside>
+
+    <div class="content">
+        <section class="hero">
+            <h2>Encontre profissionais de confiança</h2>
+            <p>Contrate serviços e mão de obra de forma rápida, segura e prática. Escolha entre diversas opções e profissionais qualificados na sua região.</p>
+        </section>
+
+        <section class="services" id="servicesContainer">
+            <!-- Serviços originais -->
+            <div class="service-card" data-service="Eletricista">
+                <img src="eletricista.jpg" alt="Eletricista" />
+                <h3>Eletricista</h3>
+                <p>Região: Centro - R$ 80/h</p>
+            </div>
+            <div class="service-card" data-service="Encanador">
+                <img src="encanador.jpg" alt="Encanador" />
+                <h3>Encanador</h3>
+                <p>Região: Bairro Novo - R$ 70/h</p>
+            </div>
+            <div class="service-card" data-service="Pintor">
+                <img src="pintor.jpg" alt="Pintor" />
+                <h3>Pintor</h3>
+                <p>Região: Zona Sul - R$ 60/h</p>
+            </div>
+            <div class="service-card" data-service="Carpinteiro">
+                <img src="carpinteiro.jpg" alt="Carpinteiro" />
+                <h3>Carpinteiro</h3>
+                <p>Região: Zona Norte - R$ 75/h</p>
+            </div>
+            <div class="service-card" data-service="Jardineiro">
+                <img src="jardineiro.jpg" alt="Jardineiro" />
+                <h3>Jardineiro</h3>
+                <p>Região: Centro - R$ 50/h</p>
+            </div>
+            <div class="service-card" data-service="Limpeza">
+                <img src="limp.jpg" alt="Limpeza" />
+                <h3>Limpeza</h3>
+                <p>Região: Bairro Novo - R$ 40/h</p>
+            </div>
+            <div class="service-card" data-service="Mudança">
+                <img src="mudança.jpg" alt="Mudança" />
+                <h3>Mudança</h3>
+                <p>Região: Zona Sul - R$ 100/h</p>
+            </div>
+            <div class="service-card" data-service="Reformas">
+                <img src="ref.jpg" alt="Reformas" />
+                <h3>Reformas</h3>
+                <p>Região: Zona Norte - R$ 90/h</p>
+            </div>
+
+            <!-- Novos serviços adicionados -->
+            <div class="service-card" data-service="Marcenaria">
+                <img src="mar.jpg" alt="Marcenaria" />
+                <h3>Marcenaria</h3>
+                <p>Região: Centro - R$ 85/h</p>
+            </div>
+            <div class="service-card" data-service="Segurança">
+                <img src="seg.jpg" alt="Segurança" />
+                <h3>Segurança</h3>
+                <p>Região: Zona Sul - R$ 70/h</p>
+            </div>
+            <div class="service-card" data-service="Reparo Eletrodomésticos">
+                <img src="reparo.jpg" alt="Reparos de Eletrodomésticos" />
+                <h3>Reparos de Eletrodomésticos</h3>
+                <p>Região: Bairro Novo - R$ 65/h</p>
+            </div>
+            <div class="service-card" data-service="Serviços de TI">
+                <img src="ti.jpg" alt="Serviços de TI" />
+                <h3>Serviços de TI</h3>
+                <p>Região: Centro - R$ 90/h</p>
+            </div>
+            <div class="service-card" data-service="mecânico">
+                <img src="mec.jpg" alt="Manutenção de Ar Condicionados" />
+                <h3>mecânico</h3>
+                <p>Região: Zona Norte - R$ 80/h</p>
+            </div>
+            <div class="service-card" data-service="Limpeza Especial">
+                <img src="https://images.unsplash.com/photo-1504595403659-9088ce801e29?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400" alt="Limpeza Especial" />
+                <h3>Limpeza Especial</h3>
+                <p>Região: Bairro Novo - R$ 75/h</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <p>Trampo Já © 2023</p>
+</footer>
+
+<!-- Modal Contato -->
+<div id="modalContato" class="modal">
+    <div class="modal-content">
+        <h2>Contato</h2>
+        <p>Telefone: <b>51993144949</b></p>
+        <p>Email: <b>empresatrampojá@gmail.com</b></p>
+        <button class="closeBtn">Fechar</button>
+    </div>
+</div>
+
+<!-- Modal Confirmação Sair -->
+<div id="modalConfirmExit" class="modal">
+    <div class="modal-content">
+        <h2>Confirmar saída</h2>
+        <p>Você realmente deseja sair do site?</p>
+        <button id="confirmExitBtn">Sim, sair</button>
+        <button class="closeBtn">Cancelar</button>
+    </div>
+</div>
+
+<!-- Modal Agendamento -->
+<div id="modalAgendamento" class="modal">
+    <div class="modal-content">
+        <h2>Agendar Horário</h2>
+        <form id="agendamentoForm">
+            <label for="dia">Dia da Semana:</label>
+            <select id="dia" name="dia" required>
+                <option value="" disabled selected>Selecione o dia</option>
+                <option value="Segunda-feira">Segunda-feira</option>
+                <option value="Terça-feira">Terça-feira</option>
+                <option value="Quarta-feira">Quarta-feira</option>
+                <option value="Quinta-feira">Quinta-feira</option>
+                <option value="Sexta-feira">Sexta-feira</option>
+                <option value="Sábado">Sábado</option>
+                <option value="Domingo">Domingo</option>
+            </select>
+
+            <label for="horario">Horário:</label>
+            <select id="horario" name="horario" required>
+                <option value="" disabled selected>Selecione o horário</option>
+                <option>09:00</option>
+                <option>10:00</option>
+                <option>11:00</option>
+                <option>12:00</option>
+                <option>13:00</option>
+                <option>14:00</option>
+                <option>15:00</option>
+                <option>16:00</option>
+            </select>
+
+            <label for="pagamento">Forma de Pagamento:</label>
+            <select id="pagamento" name="pagamento" required>
+                <option value="" disabled selected>Selecione o pagamento</option>
+                <option>Pix</option>
+                <option>Cartão de Crédito</option>
+                <option>Cartão de Débito</option>
+                <option>Dinheiro</option>
+            </select>
+
+            <button type="submit" class="submitBtn">Agendar</button>
+        </form>
+        <button class="closeBtn" style="margin-top:10px;">Cancelar</button>
+    </div>
+</div>
+
+<script>
+    // Função para limpar classe active nos botões da sidebar
+    function clearActiveSidebar() {
+        document.querySelectorAll('.sidebar button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+    }
+
+    // Filtrar serviços na sidebar
+    const serviceButtons = document.querySelectorAll('.sidebar button');
+    const serviceCards = document.querySelectorAll('.service-card');
+
+    serviceButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            clearActiveSidebar();
+            btn.classList.add('active');
+            const service = btn.getAttribute('data-service');
+            if (service === 'all') {
+                serviceCards.forEach(card => card.style.display = 'block');
+            } else {
+                serviceCards.forEach(card => {
+                    if (card.dataset.service === service) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
+
+    // Modal contato
+    const modalContato = document.getElementById('modalContato');
+    const btnContato = document.getElementById('btnContato');
+
+    // Modal sair
+    const modalConfirmExit = document.getElementById('modalConfirmExit');
+    const btnLogout = document.getElementById('btnLogout');
+    const confirmExitBtn = document.getElementById('confirmExitBtn');
+
+    // Modal agendamento
+    const modalAgendamento = document.getElementById('modalAgendamento');
+    const agendamentoForm = document.getElementById('agendamentoForm');
+
+    btnContato.addEventListener('click', () => {
+        modalContato.classList.add('active');
+    });
+
+    btnLogout.addEventListener('click', () => {
+        modalConfirmExit.classList.add('active');
+    });
+
+    confirmExitBtn.addEventListener('click', () => {
+        window.close();
+        window.location.href = "about:blank";
+    });
+
+    // Fechar modais
+    document.querySelectorAll('.closeBtn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            modalContato.classList.remove('active');
+            modalConfirmExit.classList.remove('active');
+            modalAgendamento.classList.remove('active');
+        });
+    });
+
+    // Abrir modal de agendamento ao clicar no serviço
+    serviceCards.forEach(card => {
+        card.addEventListener('click', () => {
+            modalAgendamento.classList.add('active');
+        });
+    });
+
+    // Evento do formulário de agendamento
+    agendamentoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Pega valores
+        const dia = agendamentoForm.dia.value;
+        const horario = agendamentoForm.horario.value;
+        const pagamento = agendamentoForm.pagamento.value;
+
+        alert(`Agendamento realizado para ${dia} às ${horario}.\nForma de pagamento: ${pagamento}`);
+
+        // Fecha modal e reseta formulário
+        modalAgendamento.classList.remove('active');
+        agendamentoForm.reset();
+    });
+</script>
+
+</body>
