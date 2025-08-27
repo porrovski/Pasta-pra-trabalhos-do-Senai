@@ -1,11 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site do porrovski</title>
+<meta charset="UTF-8">
+<title>Trampo Já - Login</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+body {
+  height:100vh; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#008c96,#000);
+}
+.container {
+  background:#fff; padding:30px; width:350px; border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,.5);
+}
+h2 {text-align:center; margin-bottom:20px; color:#005cb3;}
+input {
+  width:100%; padding:12px; margin:8px 0; border:1px solid #ccc;
+  border-radius:8px; font-size:16px;
+}
+button {
+  width:100%; padding:12px; margin-top:12px;
+  background:#005dc7; color:#fff; font-size:18px; font-weight:bold;
+  border:none; border-radius:8px; cursor:pointer; transition:.3s;
+}
+button:hover {background:#003bbb;}
+.link-btn {
+  display:block; text-align:center; margin-top:10px; color:#000000;
+  font-weight:bold; text-decoration:none; cursor:pointer;
+}
+.msg {text-align:center; margin-top:15px; font-size:14px; color:rgb(0, 0, 0);}
+</style>
 </head>
 <body>
-    <h1>FireBall</h1>
+<div class="container" id="login-container">
+  <h2 id="title">Login</h2>
+  <input type="text" id="username" placeholder="Usuário">
+  <input type="password" id="password" placeholder="Senha">
+  <button onclick="submitForm()">Entrar</button>
+  <a class="link-btn" onclick="toggleForm()">Não tem conta? Cadastre-se</a>
+  <a class="link-btn" onclick="forgotPassword()">Esqueci minha senha</a>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+let isLogin = true;
+
+// Redireciona automaticamente se já estiver logado
+
+function toggleForm(){
+  isLogin = !isLogin;
+  document.getElementById('title').textContent = isLogin ? "Login" : "Cadastro";
+  document.querySelector('button').textContent = isLogin ? "Entrar" : "Cadastrar";
+  document.querySelectorAll('.link-btn')[0].textContent = isLogin ? "Não tem conta? Cadastre-se" : "Já tem conta? Faça login";
+}
+
+function submitForm(){
+  const user = document.getElementById('username').value.trim();
+  const pass = document.getElementById('password').value.trim();
+  const msg = document.getElementById('msg');
+
+  if(user === "" || pass === ""){
+    msg.style.color = "red";
+    msg.textContent = "Preencha todos os campos.";
+    return;
+  }
+
+  if(isLogin){
+    const savedUser = localStorage.getItem('username');
+    const savedPass = localStorage.getItem('password');
+    if(user === savedUser && pass === savedPass){
+      msg.style.color = "green";
+      msg.textContent = "Login realizado! Redirecionando...";
+      localStorage.setItem('isLogged', 'true');
+      setTimeout(() => { window.location.href = "home.html"; }, 1000);
+    } else {
+      msg.style.color = "red";
+      msg.textContent = "Usuário ou senha incorretos!";
+    }
+  } else {
+    localStorage.setItem('username', user);
+    localStorage.setItem('password', pass);
+    localStorage.setItem('isLogged', 'true');
+    msg.style.color = "green";
+    msg.textContent = "Cadastro realizado! Redirecionando...";
+    setTimeout(() => { window.location.href = "home.html"; }, 1000);
+  }
+}
+
+function forgotPassword(){
+  const user = prompt("Digite seu usuário para redefinir a senha:");
+  if(user === localStorage.getItem('username')){
+    const newPass = prompt("Digite a nova senha:");
+    if(newPass){
+      localStorage.setItem('password', newPass);
+      alert("Senha redefinida com sucesso!");
+    }
+  } else {
+    alert("Usuário não encontrado.");
+  }
+}
+</script>
 </body>
 </html>
